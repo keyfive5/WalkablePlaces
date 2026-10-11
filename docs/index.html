@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>WalkablePlaces — How walkable is the world?</title>
+  <meta name="description" content="An interactive world map of walkability. Scores for every country, thousands of cities and their neighbourhoods, computed from open map data — compare any places side by side.">
+  <meta property="og:title" content="WalkablePlaces — How walkable is the world?">
+  <meta property="og:description" content="Walkability scores for countries, cities and neighbourhoods worldwide, computed from open data. Explore the map and compare places.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://keyfive5.github.io/WalkablePlaces/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#05070c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e9ecf1" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2l12 7v14l-12 7-12-7V9z' fill='%2360c2ff'/%3E%3Cpath d='M16 9l6 3.5v7L16 23l-6-3.5v-7z' fill='%2305070c'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="vendor/maplibre-gl-6.11.2/maplibre-gl.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script>
+    // Resolve the theme before first paint so the page never flashes the wrong one.
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('wp-theme'); } catch (e) {}
+      var mode = stored || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.dataset.theme = mode;
+      document.documentElement.dataset.resolvedTheme = mode;
+    })();
+  </script>
+</head>
+<body>
+  <div id="map" role="region" aria-label="World walkability map"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <aside id="panel" class="panel" aria-label="Place details">
+    <div class="sheet-handle" aria-hidden="true"><span></span></div>
+    <header class="panel-head">
+      <a class="brand" href="#/" aria-label="WalkablePlaces home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l12 7v14l-12 7-12-7V9z"/><path class="brand-inner" d="M16 9l6 3.5v7L16 23l-6-3.5v-7z"/></svg>
+        <span>Walkable<b>Places</b></span>
+      </a>
+      <div class="search" role="search">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="search" type="search" autocomplete="off" spellcheck="false"
+          placeholder="Search places or any address" aria-label="Search places"
+          aria-controls="search-results" aria-expanded="false" role="combobox">
+        <kbd aria-hidden="true">/</kbd>
+        <div id="search-results" class="search-results" role="listbox" hidden></div>
+      </div>
+    </header>
+    <nav id="crumbs" class="crumbs" aria-label="Breadcrumb"></nav>
+    <div id="panel-body" class="panel-body" tabindex="-1"></div>
+  </aside>
+
+  <div class="map-controls" role="toolbar" aria-label="Map controls">
+    <div id="metric" class="segmented" role="radiogroup" aria-label="Colour the map by" hidden></div>
+    <div class="ctrl-group">
+      <button id="btn-3d" class="ctrl" type="button" aria-pressed="true" title="Toggle 3D">3D</button>
+      <button id="btn-locate" class="ctrl" type="button" title="Score where I am" aria-label="Score where I am">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>
+      </button>
+      <button id="btn-theme" class="ctrl" type="button" title="Light / dark" aria-label="Switch light or dark theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+      </button>
+      <button id="btn-about" class="ctrl" type="button" title="How scores work" aria-label="How scores work">?</button>
+    </div>
+  </div>
+
+  <div id="legend" class="legend" aria-label="Legend"></div>
+  <div id="tooltip" class="tooltip" role="status" aria-live="polite" hidden></div>
+  <div id="tray" class="tray" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="about" class="modal" aria-labelledby="about-title"></dialog>
+  <dialog id="compare" class="modal modal-wide" aria-labelledby="compare-title"></dialog>
+
+  <noscript><p class="noscript">WalkablePlaces is an interactive map and needs JavaScript.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
