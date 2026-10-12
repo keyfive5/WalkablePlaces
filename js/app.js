@@ -344,7 +344,9 @@ function toast(msg) {
 
 // ---- search ---------------------------------------------------------------------------------------
 const input = $('#search'), results = $('#search-results');
-const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+// Accent-insensitive, plus letters that don't decompose (Đà Nẵng → da nang, Łódź → lodz, Ørestad → orestad).
+const LETTERS = { đ: 'd', ł: 'l', ø: 'o', ß: 'ss', æ: 'ae', œ: 'oe', ı: 'i', þ: 'th', ð: 'd' };
+const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[đłøßæœıþð]/g, (c) => LETTERS[c]);
 let searchSeq = 0, activeIdx = -1, items = [];
 
 input.addEventListener('focus', () => { loadHoodIndex(); if (input.value.trim().length >= 2) runSearch(); });
